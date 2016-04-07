@@ -8,6 +8,7 @@ var coin;
 var enemies;
 var GRAVITY = 1;
 var JUMP = 15;
+var button;
 
 function preload() {
   scene = loadImage("Art/Background/sky.jpg");
@@ -16,14 +17,25 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   gameState = WAITING;
+
+  button = createButton('START');
+  button.position(width/2, height/2);
+  button.mousePressed(startGame);
+
 }
 
 function draw() {
   image(scene, 0, 0, windowWidth, windowHeight);
+  
   if(gameState == WAITING) {
-    text("PRESS KEY TO PLAY", width/2, height/2);  
+   /* button = createButton('START');
+    button.position(width/2, height/2);
+    button.mousePressed(startGame);*/
   }
+  
   else if(gameState == PLAYING_GAME) {
+    button.remove();
+    
     image(scene, 0, 0, windowWidth, windowHeight);
     
     player.velocity.y += GRAVITY;
@@ -53,12 +65,18 @@ function draw() {
   }
   else if (gameState == GAME_OVER) {
     image(scene, 0, 0, windowWidth, windowHeight);
-    text("GAME OVER", width/2, height/2);
+    //text("GAME OVER", width/2, height/2);
+    
+    button.remove();
+    button = createButton('TRY AGAIN?');
+    button.position(width/2, height/2);
+    button.mousePressed(startGame);
   }
 }
+
 function dead(collector, collected) {
   collected.remove();
-  collector.clear();
+  collector.remove();
   gameState = GAME_OVER;
 }
 
