@@ -30,19 +30,16 @@ var ground;
 
 function createGround() {
   
-  var xInt = -15;
-  
+  var xInt = 45;
   ground = new Group();
   
   while(xInt < windowWidth) {
-      
-    //image(gfloor, xInt, windowHeight - 85, 100, 100);
-      var newFloor = createSprite(xInt, windowHeight, 100, 100);
-      newFloor.addImage(gfloor);
-      ground.add(newFloor);
-      
-    xInt += 100;
-  }
+    var newFloor = createSprite(xInt, windowHeight, 100, 100);
+    newFloor.addImage(gfloor);
+    ground.add(newFloor);
+     
+     xInt += 80;
+   }
 }
 
 function draw() {
@@ -59,9 +56,11 @@ function draw() {
     
     player.velocity.y += GRAVITY;
     
-     if(player.collide(newFloor)) {
-     player.velocity.y = 0;
-     }
+    if(player.collide(ground)) player.velocity.y = 0;
+    
+    // if(player.collide(newFloor)) {
+    // player.velocity.y = 0;
+    // }
     
     if(keyIsDown(UP_ARROW)) {
       //JUMP
@@ -121,6 +120,10 @@ function keyPressed() {
   else if (gameState == GAME_OVER) {
     
   }
+}
+
+function keyReleased() {
+  player.velocity.x = 0;
 }
 
 function startGame() {
