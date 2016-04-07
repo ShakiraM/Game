@@ -10,8 +10,10 @@ var GRAVITY = 1;
 var JUMP = 15;
 var button;
 
+
 function preload() {
   scene = loadImage("Art/Background/sky.jpg");
+  gfloor = loadImage("Art/Platforms/tiles_Green.png");
 }
 
 function setup() {
@@ -38,7 +40,17 @@ function draw() {
     
     image(scene, 0, 0, windowWidth, windowHeight);
     
+    var xInt = -15;
+    
+    while(xInt < windowWidth) {
+      
+      image(gfloor, xInt, windowHeight - 85, 100, 100);
+      
+      xInt += 88;
+    }
+    
     player.velocity.y += GRAVITY;
+    
     
     if(keyIsDown(UP_ARROW)) {
       //JUMP
