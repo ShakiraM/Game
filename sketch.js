@@ -26,13 +26,30 @@ function setup() {
 
 }
 
+var ground;
+
+function createGround() {
+  
+  var xInt = -15;
+  
+  ground = new Group();
+  
+  while(xInt < windowWidth) {
+      
+    //image(gfloor, xInt, windowHeight - 85, 100, 100);
+      var newFloor = createSprite(xInt, windowHeight, 100, 100);
+      newFloor.addImage(gfloor);
+      ground.add(newFloor);
+      
+    xInt += 100;
+  }
+}
+
 function draw() {
   image(scene, 0, 0, windowWidth, windowHeight);
   
   if(gameState == WAITING) {
-   /* button = createButton('START');
-    button.position(width/2, height/2);
-    button.mousePressed(startGame);*/
+   
   }
   
   else if(gameState == PLAYING_GAME) {
@@ -40,17 +57,11 @@ function draw() {
     
     image(scene, 0, 0, windowWidth, windowHeight);
     
-    var xInt = -15;
-    
-    while(xInt < windowWidth) {
-      
-      image(gfloor, xInt, windowHeight - 85, 100, 100);
-      
-      xInt += 88;
-    }
-    
     player.velocity.y += GRAVITY;
     
+     if(player.collide(newFloor)) {
+     player.velocity.y = 0;
+     }
     
     if(keyIsDown(UP_ARROW)) {
       //JUMP
@@ -83,6 +94,7 @@ function draw() {
     button = createButton('TRY AGAIN?');
     button.position(width/2, height/2);
     button.mousePressed(startGame);
+    
   }
 }
 
@@ -114,6 +126,7 @@ function keyPressed() {
 function startGame() {
     gameState = PLAYING_GAME;
     score = 0;
+    createGround();
     //CREATE THE PLAYER
     player = createSprite(width/2, height/2, 100, 100);
     player.addAnimation("running", "Art/Player/run_0.png", "Art/Player/run_1.png", "Art/Player/run_2.png", "Art/Player/run_3.png", "Art/Player/run_4.png", "Art/Player/run_5.png");
