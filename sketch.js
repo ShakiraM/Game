@@ -7,7 +7,7 @@ var player;
 var coin;
 var enemies;
 var GRAVITY = 1;
-var JUMP = 15;
+var JUMP = 10;
 var button;
 
 
@@ -64,18 +64,23 @@ function draw() {
     
     if(keyIsDown(UP_ARROW)) {
       //JUMP
-      //player.setSpeed(3, 270);
       player.velocity.y = -JUMP;
+      player.changeAnimation("jumping");
       
     }
-    if (keyIsDown(LEFT_ARROW)) {
+    else if (keyIsDown(LEFT_ARROW)) {
       //MOVE LEFT
       player.setSpeed(5, 180);
 
     }
-    if (keyIsDown(RIGHT_ARROW)) {
+    else if (keyIsDown(RIGHT_ARROW)) {
       //MOVE RIGHT
       player.setSpeed(5, 0);
+      player.changeAnimation("running");
+    
+    }
+    else {
+      player.changeAnimation("idle");
     }
     /*for (var i = 0; i < enemies.length; i++) {
       var enemy = enemies.get(i);
@@ -132,7 +137,9 @@ function startGame() {
     createGround();
     //CREATE THE PLAYER
     player = createSprite(width/2, height/2, 100, 100);
+    player.addAnimation("idle", "Art/Player/idle_0.png", "Art/Player/idle_1.png", "Art/Player/idle_2.png", "Art/Player/idle_3.png");
     player.addAnimation("running", "Art/Player/run_0.png", "Art/Player/run_1.png", "Art/Player/run_2.png", "Art/Player/run_3.png", "Art/Player/run_4.png", "Art/Player/run_5.png");
+    player.addAnimation("jumping", "Art/Player/jump_0.png");
     //CREATE SOME ENEMIES
     enemies = new Group();
     for (var i = 0; i < 3; i++) {
