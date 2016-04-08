@@ -136,7 +136,7 @@ function startGame() {
     score = 0;
     createGround();
     //CREATE THE PLAYER
-    player = createSprite(width/2, height/2, 100, 100);
+    player = createSprite(100, 100, 100, 100);
     player.addAnimation("idle", "Art/Player/idle_0.png", "Art/Player/idle_1.png", "Art/Player/idle_2.png", "Art/Player/idle_3.png");
     player.addAnimation("running", "Art/Player/run_0.png", "Art/Player/run_1.png", "Art/Player/run_2.png", "Art/Player/run_3.png", "Art/Player/run_4.png", "Art/Player/run_5.png");
     player.addAnimation("jumping", "Art/Player/jump_0.png");
