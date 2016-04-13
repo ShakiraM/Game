@@ -7,7 +7,7 @@ var player;
 var coin;
 var enemies;
 var GRAVITY = 1;
-var JUMP = 10;
+var JUMP = 20;
 var button;
 
 
@@ -36,6 +36,7 @@ function createGround() {
   while(xInt < windowWidth) {
     var newFloor = createSprite(xInt, windowHeight, 100, 100);
     newFloor.addImage(gfloor);
+    newFloor.setCollider("rectangle", 0, 30, 100, 100);
     ground.add(newFloor);
      
      xInt += 80;
@@ -55,33 +56,12 @@ function draw() {
     image(scene, 0, 0, windowWidth, windowHeight);
     
     player.velocity.y += GRAVITY;
-    
-    if(player.collide(ground)) player.velocity.y = 0;
-    
-    // if(player.collide(newFloor)) {
-    // player.velocity.y = 0;
-    // }
-    
-    if(keyIsDown(UP_ARROW)) {
-      //JUMP
-      player.velocity.y = -JUMP;
-      player.changeAnimation("jumping");
+    if(player.collide(ground)){
+      player.velocity.y = 0;
       
-    }
-    else if (keyIsDown(LEFT_ARROW)) {
-      //MOVE LEFT
-      player.setSpeed(5, 180);
 
-    }
-    else if (keyIsDown(RIGHT_ARROW)) {
-      //MOVE RIGHT
-      player.setSpeed(5, 0);
-      player.changeAnimation("running");
-    
-    }
-    else {
-      player.changeAnimation("idle");
-    }
+    }     
+   
     /*for (var i = 0; i < enemies.length; i++) {
       var enemy = enemies.get(i);
       enemy.attractionPoint(.2, player.position.x, player.position.y);
@@ -120,7 +100,23 @@ function keyPressed() {
     startGame();
   }
   else if (gameState == PLAYING_GAME) {
+    if(keyCode == UP_ARROW) {
+      //JUMP
+      player.velocity.y = -JUMP;
+      player.changeAnimation("jumping");
+    }
     
+    else if (keyCode == LEFT_ARROW) {
+      //MOVE LEFT
+      player.setSpeed(5, 180);
+      player.changeAnimation("runningleft");
+
+    }
+    else if (keyCode == RIGHT_ARROW) {
+      //MOVE RIGHT
+      player.setSpeed(5, 0);
+      player.changeAnimation("runningright");
+    }
   }
   else if (gameState == GAME_OVER) {
     
@@ -129,6 +125,7 @@ function keyPressed() {
 
 function keyReleased() {
   player.velocity.x = 0;
+  player.changeAnimation("idle");
 }
 
 function startGame() {
@@ -138,8 +135,9 @@ function startGame() {
     //CREATE THE PLAYER
     player = createSprite(100, 100, 100, 100);
     player.addAnimation("idle", "Art/Player/idle_0.png", "Art/Player/idle_1.png", "Art/Player/idle_2.png", "Art/Player/idle_3.png");
-    player.addAnimation("running", "Art/Player/run_0.png", "Art/Player/run_1.png", "Art/Player/run_2.png", "Art/Player/run_3.png", "Art/Player/run_4.png", "Art/Player/run_5.png");
+    player.addAnimation("runningright", "Art/Player/run_0.png", "Art/Player/run_1.png", "Art/Player/run_2.png", "Art/Player/run_3.png", "Art/Player/run_4.png", "Art/Player/run_5.png");
     player.addAnimation("jumping", "Art/Player/jump_0.png");
+    player.addAnimation("runningleft","Art/Player/run2_0.png", "Art/Player/run2_1.png", "Art/Player/run2_2.png", "Art/Player/run2_3.png", "Art/Player/run2_4.png", "Art/Player/run2_5.png");
     //CREATE SOME ENEMIES
     enemies = new Group();
     for (var i = 0; i < 3; i++) {
