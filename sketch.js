@@ -54,6 +54,8 @@ function draw() {
   else if(gameState == PLAYING_GAME) {
     button.remove();
     
+    camera.position.x = player.position.x + width/4
+    
     image(scene, 0, 0, windowWidth, windowHeight);
     
     player.velocity.y += GRAVITY;
@@ -146,7 +148,7 @@ function startGame() {
     plats = new Group();
     var plat = createSprite(player.position.x + 300, 680, 100, 100);
     plat.addImage(gfloor);
-    plat.setCollider("rectangle", 70, 20, 0, 100);
+    plat.setCollider("rectangle", 70, 20, 20, 100);
     plats.add(plat);
     //CREATE SOME ENEMIES
     enemies = new Group();
