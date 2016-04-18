@@ -37,7 +37,7 @@ function createGround() {
   while(xInt < windowWidth) {
     var newFloor = createSprite(xInt, windowHeight, 100, 100);
     newFloor.addImage(gfloor);
-    newFloor.setCollider("rectangle", 0, 30, 100, 100);
+    newFloor.setCollider("rectangle", 0, 35, 100, 100);
     ground.add(newFloor);
      
      xInt += 80;
@@ -140,15 +140,16 @@ function startGame() {
     createGround();
     //CREATE THE PLAYER
     player = createSprite(100, 100, 100, 100);
+    player.setCollider("rectangle", 0, 20, 20, 100)
     player.addAnimation("idle", "Art/Player/idle_0.png", "Art/Player/idle_1.png", "Art/Player/idle_2.png", "Art/Player/idle_3.png");
     player.addAnimation("runningright", "Art/Player/run_0.png", "Art/Player/run_1.png", "Art/Player/run_2.png", "Art/Player/run_3.png", "Art/Player/run_4.png", "Art/Player/run_5.png");
     player.addAnimation("jumping", "Art/Player/jump_0.png");
     player.addAnimation("runningleft","Art/Player/run2_0.png", "Art/Player/run2_1.png", "Art/Player/run2_2.png", "Art/Player/run2_3.png", "Art/Player/run2_4.png", "Art/Player/run2_5.png");
     //Platforms
     plats = new Group();
-    var plat = createSprite(player.position.x + 300, 680, 100, 100);
+    var plat = createSprite(player.position.x + 300, 680, 50, 50);
     plat.addImage(gfloor);
-    plat.setCollider("rectangle", 70, 20, 20, 100);
+    plat.setCollider("rectangle", 0, 20, 100, 70);
     plats.add(plat);
     //CREATE SOME ENEMIES
     enemies = new Group();
