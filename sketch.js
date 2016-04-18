@@ -26,6 +26,7 @@ function setup() {
 
 }
 
+var plats;
 var ground;
 
 function createGround() {
@@ -58,10 +59,11 @@ function draw() {
     player.velocity.y += GRAVITY;
     if(player.collide(ground)){
       player.velocity.y = 0;
-      
-
     }     
-   
+    
+    if(player.collide(plats)) {
+      player.velocity.y = 0;
+    }
     /*for (var i = 0; i < enemies.length; i++) {
       var enemy = enemies.get(i);
       enemy.attractionPoint(.2, player.position.x, player.position.y);
@@ -69,6 +71,8 @@ function draw() {
     player.overlap(coin, collect);
     enemies.overlap(player, dead);
     drawSprites();
+    
+    
   }
   else if (gameState == GAME_OVER) {
     image(scene, 0, 0, windowWidth, windowHeight);
@@ -138,12 +142,18 @@ function startGame() {
     player.addAnimation("runningright", "Art/Player/run_0.png", "Art/Player/run_1.png", "Art/Player/run_2.png", "Art/Player/run_3.png", "Art/Player/run_4.png", "Art/Player/run_5.png");
     player.addAnimation("jumping", "Art/Player/jump_0.png");
     player.addAnimation("runningleft","Art/Player/run2_0.png", "Art/Player/run2_1.png", "Art/Player/run2_2.png", "Art/Player/run2_3.png", "Art/Player/run2_4.png", "Art/Player/run2_5.png");
+    //Platforms
+    plats = new Group();
+    var plat = createSprite(player.position.x + 300, 680, 100, 100);
+    plat.addImage(gfloor);
+    plat.setCollider("rectangle", 70, 20, 0, 100);
+    plats.add(plat);
     //CREATE SOME ENEMIES
     enemies = new Group();
-    for (var i = 0; i < 3; i++) {
-      var newEnemy = createSprite(random(width), random(height), 20, 20);
-      enemies.add(newEnemy);
-    }
+    // for (var i = 0; i < 3; i++) {
+    //   var newEnemy = createSprite(random(width), random(height), 20, 20);
+    //   enemies.add(newEnemy);
+    // }
     //CREATE THE COIN
     coin = createSprite(random(width), random(height), 10, 10);
 }
