@@ -4,7 +4,6 @@ var WAITING = 0;
 var PLAYING_GAME = 1;
 var GAME_OVER = 2;
 var player;
-var coin;
 var enemies;
 var GRAVITY = 1;
 var JUMP = 20;
@@ -16,6 +15,7 @@ var ground;
 function preload() {
   scene = loadImage("Art/Background/sky.jpg");
   gfloor = loadImage("Art/Platforms/tiles_Green.png");
+  // chest = loadImage("Art/chest)
 }
 
 function setup() {
@@ -28,24 +28,32 @@ function setup() {
 
 }
 
+function drawPlatform(xCoord) {
+  
+  var newPlat = createSprite(xCoord, height - 100, 100, 100);
+  
+  newPlat.addImage(gfloor);
+  newPlat.setCollider("rectangle", 0, 35, 100, 80);
+  
+  plats.add(newPlat);
+}
+
 function createGround() {
   
-  var xInt = 45;
   ground = new Group();
+  plats = new Group();
   
-//  while(xInt < windowWidth) {
   for (var x = -width/2; x < width; x+= 80) {
     var newFloor = createSprite(x, height, 100, 100);
     newFloor.addImage(gfloor);
     newFloor.setCollider("rectangle", 0, 35, 100, 80);
     ground.add(newFloor);
-     
-//     xInt += 80;
+    
    }
 }
 
 function draw() {
-//background(255);
+
  image(scene, camera.position.x - width/2, camera.position.y - height/2, windowWidth, windowHeight);
   
   if(gameState == WAITING) {
@@ -55,9 +63,9 @@ function draw() {
   else if(gameState == PLAYING_GAME) {
     button.remove();
     
-    camera.position.x = player.position.x;
+    if(player.position.y >= height) gameState = GAME_OVER;
     
-   // image(scene, 0, 0, windowWidth, windowHeight);
+    camera.position.x = player.position.x;
     
     player.velocity.y += GRAVITY;
     if(player.collide(ground)){
@@ -73,6 +81,11 @@ function draw() {
       if (g.position.x < player.position.x - width/2 - 50) {
         console.log("Off screen for position: " + i);
         g.position.x = player.position.x + width/2 + 50;
+        
+        if(random(30) > 20 && g.position.y > height/2) {
+          
+          g.position.y = g.position.y - 100;
+        }
       }
     }
 
@@ -80,16 +93,12 @@ function draw() {
       var enemy = enemies.get(i);
       enemy.attractionPoint(.2, player.position.x, player.position.y);
     }*/
-    player.overlap(coin, collect);
     enemies.overlap(player, dead);
     drawSprites();
     
     
   }
   else if (gameState == GAME_OVER) {
-  //  image(scene, 0, 0, windowWidth, windowHeight);
-    //text("GAME OVER", width/2, height/2);
-    
     button.remove();
     button = createButton('TRY AGAIN?');
     button.position(width/2, height/2);
@@ -102,13 +111,6 @@ function dead(collector, collected) {
   collected.remove();
   collector.remove();
   gameState = GAME_OVER;
-}
-
-function collect(collector, collected) {
-    collected.remove();
-    score++;
-    coin = createSprite(random(width), random(height), 10, 10);
-
 }
 
 function keyPressed() {
@@ -155,19 +157,13 @@ function startGame() {
     player.addAnimation("runningright", "Art/Player/run_0.png", "Art/Player/run_1.png", "Art/Player/run_2.png", "Art/Player/run_3.png", "Art/Player/run_4.png", "Art/Player/run_5.png");
     player.addAnimation("jumping", "Art/Player/jump_0.png");
     player.addAnimation("runningleft","Art/Player/run2_0.png", "Art/Player/run2_1.png", "Art/Player/run2_2.png", "Art/Player/run2_3.png", "Art/Player/run2_4.png", "Art/Player/run2_5.png");
-    //Platforms
-    plats = new Group();
-    var plat = createSprite(player.position.x + 300, 680, 50, 50);
-    plat.addImage(gfloor);
-    plat.setCollider("rectangle", 0, 20, 100, 50);
-    plats.add(plat);
+    
     //CREATE SOME ENEMIES
     enemies = new Group();
     // for (var i = 0; i < 3; i++) {
     //   var newEnemy = createSprite(random(width), random(height), 20, 20);
     //   enemies.add(newEnemy);
     // }
-    //CREATE THE COIN
-    coin = createSprite(random(width), random(height), 10, 10);
+   
 }
  
