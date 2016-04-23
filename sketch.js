@@ -10,12 +10,14 @@ var JUMP = 20;
 var button;
 var plats;
 var ground;
+var chest;
+var chestImage;
 
 
 function preload() {
   scene = loadImage("Art/Background/sky.jpg");
   gfloor = loadImage("Art/Platforms/tiles_Green.png");
-  // chest = loadImage("Art/chest)
+  chestImage = loadImage("Art/Chest/box_open.png");
 }
 
 function setup() {
@@ -53,7 +55,7 @@ function createGround() {
 }
 
 function draw() {
-
+  
  image(scene, camera.position.x - width/2, camera.position.y - height/2, windowWidth, windowHeight);
   
   if(gameState == WAITING) {
@@ -64,6 +66,8 @@ function draw() {
     button.remove();
     
     if(player.position.y >= height) gameState = GAME_OVER;
+    
+    if(chest && player.collide(chest)) gameState = GAME_OVER;
     
     camera.position.x = player.position.x;
     
@@ -82,9 +86,27 @@ function draw() {
         console.log("Off screen for position: " + i);
         g.position.x = player.position.x + width/2 + 50;
         
-        if(random(30) > 20 && g.position.y > height/2) {
+        if(random(30) > 20) {
           
-          g.position.y = g.position.y - 100;
+          if(g.position.y > height/2) {
+            g.position.y = g.position.y - 100;
+          }
+          else {
+            score++;
+          }
+        }
+        
+        if(score > 5) {
+          
+          if(!chest) {
+            chest = createSprite(g.position.x, g.position.y - 100, 125, 85);
+            chest.addImage(chestImage);
+            chest.setCollider("rectangle", 0, 30, 125, 60);
+          }
+          else if(chest.position.x < player.position.x - width/2 - 50) {
+            chest.position.x = g.position.x;
+            chest.position.y = g.position.y - 100;
+          }
         }
       }
     }
