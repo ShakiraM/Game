@@ -32,7 +32,13 @@ function setup() {
 
 function mousePressed() {  
   //button = createButton('START');
-  startGame();
+  if (gameState == WAITING) {
+    startGame();
+  }
+
+  if (gameState == GAME_OVER) {
+    startGame();
+  }
 }
 
 // function drawPlatform(xCoord) {
@@ -53,7 +59,9 @@ function createGround() {
   for (var x = -width/2; x < width; x+= 80) {
     var newFloor = createSprite(x, height, 100, 100);
     newFloor.addImage(gfloor);
+    ground.debug = true;
     newFloor.setCollider("rectangle", 0, 35, 100, 80);
+    newFloor.immovable = true;
     ground.add(newFloor);
     
    }
@@ -64,7 +72,8 @@ function draw() {
  image(scene, camera.position.x - width/2, camera.position.y - height/2, windowWidth, windowHeight);
   
   if(gameState == WAITING) {
-   startButton = image(starto, 400, 300);
+    image(starto, camera.position.x - width/2, camera.position.y - height/2);
+
   }
   
   else if(gameState == PLAYING_GAME) {
@@ -77,12 +86,22 @@ function draw() {
     camera.position.x = player.position.x;
     
     player.velocity.y += GRAVITY;
+    
+    enemies.bounce(ground);
+    if (frameCount%500 == 0) {
+      newEnemy();
+    }
+    
     if(player.collide(ground)){
       player.velocity.y = 0;
     }     
     
     if(player.collide(plats)) {
       player.velocity.y = 0;
+    }
+    
+    if (chest) {
+      chest.collide(ground);
     }
 
     for(var i = 0; i < ground.length; i++) {
@@ -106,19 +125,23 @@ function draw() {
           if(!chest) {
             chest = createSprite(g.position.x, g.position.y - 100, 125, 85);
             chest.addImage(chestImage);
-            chest.setCollider("rectangle", 0, 30, 125, 60);
+            chest.debug = true;
+            chest.setCollider("rectangle", 0, 0, 125, 0);
+            
+            
           }
-          else if(chest.position.x < player.position.x - width/2 - 50) {
-            chest.position.x = g.position.x;
-            chest.position.y = g.position.y - 100;
-          }
+          //else if(chest.position.x < player.position.x - width/2 - 50) {
+          //  chest.position.x = g.position.x;
+          //  chest.position.y = g.position.y - 10;
+        //  }
         }
       }
     }
 
     for (var i = 0; i < enemies.length; i++) {
       var enemy = enemies.get(i);
-      enemy.attractionPoint(.2, player.position.x, player.position.y);
+      enemy.attractionPoint(.1, player.position.x, player.position.y);
+
     }
     enemies.overlap(player, dead);
     drawSprites();
@@ -126,12 +149,19 @@ function draw() {
     
   }
   else if (gameState == GAME_OVER) {
-    startButton = image(starto, width/3 - 50, height/3);
+        image(starto, camera.position.x - width/2, camera.position.y - height/2);
+
+//    startButton = image(starto, width/3 - 50, height/3);
   }
 }
 
 function dead(collector, collected) {
   gameState = GAME_OVER;
+  enemies.removeSprites();
+  plats.removeSprites();
+  ground.removeSprites();
+  player.remove();
+  
 }
 
 function keyPressed() {
@@ -147,13 +177,13 @@ function keyPressed() {
     
     else if (keyCode == LEFT_ARROW) {
       //MOVE LEFT
-      player.setSpeed(5, 180);
+      player.setSpeed(6, 180);
       player.changeAnimation("runningleft");
 
     }
     else if (keyCode == RIGHT_ARROW) {
       //MOVE RIGHT
-      player.setSpeed(5, 0);
+      player.setSpeed(6, 0);
       player.changeAnimation("runningright");
     }
   }
@@ -181,11 +211,17 @@ function startGame() {
     
     //CREATE SOME ENEMIES
     enemies = new Group();
-    for (var i = 0; i < 3; i++) {
-    var newEnemy = createSprite(random(width), random(height), 20, 20);
-    newEnemy.addAnimation("flying", "Art/Dragon/frame-1.png","Art/Dragon/frame-2.png","Art/Dragon/frame-3.png","Art/Dragon/frame-4.png");
-    enemies.add(newEnemy);
+    for (var i = 0; i < 1; i++) {
+      newEnemy();
     }
    
+}
+
+function newEnemy() {
+    var newEnemy = createSprite(random(width), random(height), 20, 20);
+    newEnemy.addAnimation("flying", "Art/Dragon/frame-1.png","Art/Dragon/frame-2.png","Art/Dragon/frame-3.png","Art/Dragon/frame-4.png");
+    //newEnemy.life = 500;
+    newEnemy.maxSpeed = 4;
+    enemies.add(newEnemy);
 }
  
