@@ -12,33 +12,38 @@ var plats;
 var ground;
 var chest;
 var chestImage;
+var startButton;
 
 
 function preload() {
   scene = loadImage("Art/Background/sky.jpg");
   gfloor = loadImage("Art/Platforms/tiles_Green.png");
   chestImage = loadImage("Art/Chest/box_open.png");
+  starto = loadImage("Art/Start/start.png");
+  mySound = loadSound('Art/music.mp3');
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   gameState = WAITING;
-
-  button = createButton('START');
-  button.position(width/2, height/2);
-  button.mousePressed(startGame);
-
+  mySound.setVolume(0.3);
+	mySound.play();
 }
 
-function drawPlatform(xCoord) {
-  
-  var newPlat = createSprite(xCoord, height - 100, 100, 100);
-  
-  newPlat.addImage(gfloor);
-  newPlat.setCollider("rectangle", 0, 35, 100, 80);
-  
-  plats.add(newPlat);
+function mousePressed() {  
+  //button = createButton('START');
+  startGame();
 }
+
+// function drawPlatform(xCoord) {
+  
+//   var newPlat = createSprite(xCoord, height - 100, 100, 100);
+  
+//   newPlat.addImage(gfloor);
+//   newPlat.setCollider("rectangle", 0, 35, 100, 80);
+  
+//   plats.add(newPlat);
+// }
 
 function createGround() {
   
@@ -59,11 +64,11 @@ function draw() {
  image(scene, camera.position.x - width/2, camera.position.y - height/2, windowWidth, windowHeight);
   
   if(gameState == WAITING) {
-   
+   startButton = image(starto, 400, 300);
   }
   
   else if(gameState == PLAYING_GAME) {
-    button.remove();
+    //button.remove();
     
     if(player.position.y >= height) gameState = GAME_OVER;
     
@@ -111,27 +116,21 @@ function draw() {
       }
     }
 
-    /*for (var i = 0; i < enemies.length; i++) {
+    for (var i = 0; i < enemies.length; i++) {
       var enemy = enemies.get(i);
       enemy.attractionPoint(.2, player.position.x, player.position.y);
-    }*/
+    }
     enemies.overlap(player, dead);
     drawSprites();
     
     
   }
   else if (gameState == GAME_OVER) {
-    button.remove();
-    button = createButton('TRY AGAIN?');
-    button.position(width/2, height/2);
-    button.mousePressed(startGame);
-    
+    startButton = image(starto, width/3 - 50, height/3);
   }
 }
 
 function dead(collector, collected) {
-  collected.remove();
-  collector.remove();
   gameState = GAME_OVER;
 }
 
@@ -182,10 +181,11 @@ function startGame() {
     
     //CREATE SOME ENEMIES
     enemies = new Group();
-    // for (var i = 0; i < 3; i++) {
-    //   var newEnemy = createSprite(random(width), random(height), 20, 20);
-    //   enemies.add(newEnemy);
-    // }
+    for (var i = 0; i < 3; i++) {
+    var newEnemy = createSprite(random(width), random(height), 20, 20);
+    newEnemy.addAnimation("flying", "Art/Dragon/frame-1.png","Art/Dragon/frame-2.png","Art/Dragon/frame-3.png","Art/Dragon/frame-4.png");
+    enemies.add(newEnemy);
+    }
    
 }
  
