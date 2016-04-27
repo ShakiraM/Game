@@ -125,7 +125,7 @@ function draw() {
           if(!chest) {
             chest = createSprite(g.position.x, g.position.y - 100, 125, 85);
             chest.addImage(chestImage);
-            chest.debug = true;
+            //chest.debug = true;
             chest.setCollider("rectangle", 0, 0, 125, 0);
             
             
@@ -177,13 +177,13 @@ function keyPressed() {
     
     else if (keyCode == LEFT_ARROW) {
       //MOVE LEFT
-      player.setSpeed(6, 180);
+      player.setSpeed(5, 180);
       player.changeAnimation("runningleft");
 
     }
     else if (keyCode == RIGHT_ARROW) {
       //MOVE RIGHT
-      player.setSpeed(6, 0);
+      player.setSpeed(5, 0);
       player.changeAnimation("runningright");
     }
   }
